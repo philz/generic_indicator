@@ -9,7 +9,7 @@
 # See also https://wiki.ubuntu.com/DesktopExperienceTeam/ApplicationIndicators
 #
 # Example Invocations:
-#  generic_indicator.py 'gksudo -- openvpn --config ~/vpn/client.ovpn'
+#  sudo generic_indicator.py -- openvpn --config ~/vpn/client.ovpn
 #
 
 import sys
@@ -49,10 +49,11 @@ class Indicator(object):
 
     self.menu = gtk.Menu()
 
-    if len(args.cmd) > 20:
-      memo = args.cmd[0:17] + "..."
+    str_cmd =  " ".join(args.cmd)
+    if len(str_cmd) > 20:
+      memo = str_cmd[0:17] + "..."
     else:
-      memo = args.cmd
+      memo = str_cmd
     self.memo_item = gtk.MenuItem(memo)
     self.memo_item.set_sensitive(False)
     self.memo_item.show()
@@ -109,7 +110,7 @@ class Indicator(object):
 
     LOG.info("Starting subprocess.")
     self.subprocess = subprocess.Popen(self.command, 
-      shell=True,
+      shell=False,
       close_fds=True,
       stdin=None, stdout=self.log_fd, stderr=self.log_fd)
     try:
@@ -172,7 +173,7 @@ def parse_args():
   parser = argparse.ArgumentParser(description='monitor a pre-configured process')
   parser.add_argument('--officon', help='icon to use when disabled', default="security-low")
   parser.add_argument('--onicon', help='icon to use when enabled', default="security-high")
-  parser.add_argument('cmd', help='command to run')
+  parser.add_argument('cmd', help='command to run', nargs='+')
   args = parser.parse_args()
   return args
       

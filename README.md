@@ -6,4 +6,4 @@ controlling a VPN connection.
 
 To invoke it:
 
-    generic_indicator.py 'gksudo -- openvpn --config ~/vpn/client.ovpn'
+    sudo generic_indicator.py -- openvpn --config ~/vpn/client.ovpn
